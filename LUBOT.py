@@ -10,7 +10,7 @@ from PIL import Image # pip install pillow
 from craiyon import Craiyon # pip install -U craiyon.py    (reclama q usa .py mas funciona)
 #makes images from a prompt, but is kinda dumb and slow AI image generation 
 from io import BytesIO # faz parte da função de criar imagem, n tenho a certeza do que faz pq copiei de alguem no youtube
-#import wavelink  <------ não rolou
+#import wavelink  <------ não rolou #todo usar yt-dl
 import sys
 import random
 import priv as p # priv is a file with the token and other stuff such as serverID, channelID, userID, etc
