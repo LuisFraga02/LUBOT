@@ -1,14 +1,16 @@
 import base64
 import nextcord
-from nextcord.utils import get
+from nextcord.utils import get # esse get é muito bom!!!
 from nextcord import Interaction, SlashOption , ChannelType
 from nextcord.ext import commands
 from nextcord.abc import GuildChannel
 import time
-from PIL import Image
-from craiyon import Craiyon #makes images from a prompt, but is kinda dumb and slow AI image generation
-from io import BytesIO
-#import wavelink
+from PIL import Image # pip install pillow
+#todo pillow não ta sendo usado mas eu quero colocar um comando que manda foto de gatinho que eu me lembre precisa disso mas não precisa instalar agora
+from craiyon import Craiyon # pip install -U craiyon.py    (reclama q usa .py mas funciona)
+#makes images from a prompt, but is kinda dumb and slow AI image generation 
+from io import BytesIO # faz parte da função de criar imagem, n tenho a certeza do que faz pq copiei de alguem no youtube
+#import wavelink  <------ não rolou
 import sys
 import random
 import priv as p # priv is a file with the token and other stuff such as serverID, channelID, userID, etc
