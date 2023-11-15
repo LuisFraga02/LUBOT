@@ -1,0 +1,5 @@
+music/*
+s.py
+__pycache__
+*.pyc
+BOT_VENV
