@@ -36,10 +36,11 @@ async def resume(interaction : Interaction):
     voice = utils.get(bot.voice_clients, guild=interaction.guild)
     voice.resume()
     await interaction.response.send_message('▶️')
-    
+
 
 @bot.tree.command(name="stop",description="para a musica")
 async def stop(interaction : Interaction):
+    queue.clear()
     voice = utils.get(bot.voice_clients, guild=interaction.guild)
     voice.stop()
     await interaction.response.send_message('⏹️')
@@ -82,7 +83,7 @@ async def playnext(interaction: Interaction):
     #wait for song to end
     while voice.is_playing():
         await asyncio.sleep(1)
-        print("esperando a musica acabar", end="\r")
+        #print("esperando a musica acabar", end="\r")
         print("faltam",left-int(time.time()),"segundos para a musica acabar", end="\r")
     print("", end="\r")
     try:
