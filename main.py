@@ -47,7 +47,11 @@ async def stop(interaction : Interaction):
 
 @bot.tree.command(name="play",description="toca uma musica")
 async def playMusic(interaction : Interaction, pesquisa : str):
-    await interaction.response.send_message(f"🔎 procurando: *__{pesquisa}__*")
+    await interaction.response.send_message(embed=Embed(
+        title=f"pesquisando [__{pesquisa}__] no youtube",
+        color=0x9933ff
+    )
+    )
     procuraBaixaEColocaNaQueue(pesquisa)
     await playnext(interaction)
 
@@ -62,7 +66,14 @@ async def playnext(interaction: Interaction):
     try:
         voice.play(source)
     except:
-        await interaction.followup.send("já tem uma musica tocando, colocando na queue")
+        await interaction.followup.send(
+            embed=Embed(
+                title="colocado na queue",
+                description="a musica foi colocada na queue",
+                color=0xff0000
+                )
+        )
+        
         return
     embed = Embed(
         url=link,
@@ -103,7 +114,11 @@ async def skip(interaction : Interaction):
     voice = utils.get(bot.voice_clients, guild=interaction.guild)
     if voice and voice.is_playing():
         voice.stop()
-        await interaction.response.send_message("Música pulada!")
+        await interaction.response.send_message(embed=Embed(
+            title="skip",
+            description="pulando para a próxima música na queue",
+            color=0x9933ff
+        ))
     else:
         await interaction.response.send_message("Não há música tocando no momento.")
 
@@ -111,7 +126,11 @@ async def skip(interaction : Interaction):
 @bot.tree.command(name="queue",description="mostra a queue")
 async def queueCommand(interaction : Interaction):
     if queue == []:
-        await interaction.response.send_message("Não há músicas na queue.")
+        await interaction.response.send_message(embed=Embed(
+            title="Queue",
+            description="não há nada na queue",
+            color=0x9933ff
+        ))
         return
     embed = Embed(
         title="Queue",
