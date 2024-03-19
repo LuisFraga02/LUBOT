@@ -138,7 +138,7 @@ async def queueCommand(interaction : Interaction):
     )
     for i in range(len(queue)):
         titulo,autor,link,views,duracao,autorImg,thumbnail,filename = queue[i].values()
-        embed.add_field(name=f"{i+1} - {titulo}", value=f"autor: {autor}\nduração: {duracao}", inline=True)
+        embed.add_field(name=f"{i+1} - {titulo}", value=f"autor: {autor}\nduração: {duracao}")
     embed.set_footer(text="Feito por: musta_01 com ❤️")
     await interaction.response.send_message(embed=embed)
 
