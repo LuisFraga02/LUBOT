@@ -95,8 +95,8 @@ async def playnext(interaction: Interaction):
     while voice.is_playing():
         await asyncio.sleep(1)
         #print("esperando a musica acabar", end="\r")
-        print("faltam",left-int(time.time()),"segundos para a musica acabar", end="\r")
-    print("", end="\r")
+        #print("faltam",left-int(time.time()),"segundos para a musica acabar", end="\r")
+    #print("", end="\r")
     try:
         queue.pop(0)
         await playnext(interaction)
@@ -141,6 +141,14 @@ async def queueCommand(interaction : Interaction):
         embed.add_field(name=f"{i+1} - {titulo}", value=f"autor: {autor}\nduração: {duracao}")
     embed.set_footer(text="Feito por: musta_01 com ❤️")
     await interaction.response.send_message(embed=embed)
+    
+
+#pausa a musica quando o bot sai do canal/ é movido para outro canal
+@bot.event
+async def on_voice_state_update(member,before, after):
+    if member.id == bot.user.id and after.channel == None:
+        voice = utils.get(bot.voice_clients, guild=member.guild)
+        voice.pause()    
 
 
 
@@ -160,15 +168,7 @@ def procuraBaixaEColocaNaQueue(pesquisa):
     url = video_element.find_element('css selector', 'ytd-thumbnail a').get_attribute('href')
     yt = YouTube(url)
     filename = yt.watch_url.replace("https://youtube.com/watch?v=", "")+".mp3"
-    if not os.path.exists("music/"+filename):
-        print("baixando a musica agora")
-        inicio = timeit.default_timer()
-        yt.streams.get_audio_only().download(output_path="music", filename=filename)
-        fim = timeit.default_timer()
-        print(f"baixei a musica {yt.title} em {fim - inicio} segundos")
-        
-    else:
-        print("ja tinha baixado a musica "+yt.title)
+    
     link = video_element.find_element('css selector', 'ytd-thumbnail a').get_attribute('href')
     autorImg =video_element.find_element('css selector', 'yt-img-shadow img').get_attribute('src')
     titulo = yt.title
@@ -176,6 +176,19 @@ def procuraBaixaEColocaNaQueue(pesquisa):
     views = "{:,}".format(yt.views)
     autor = video_element.find_element(By.XPATH ,'/html/body/ytd-app/div[1]/ytd-page-manager/ytd-search/div[1]/ytd-two-column-search-results-renderer/div/ytd-section-list-renderer/div[2]/ytd-item-section-renderer/div[3]/ytd-video-renderer[1]/div[1]/div/div[2]/ytd-channel-name/div/div/yt-formatted-string/a').text
     thumbnail = video_element.find_element(By.XPATH,"/html/body/ytd-app/div[1]/ytd-page-manager/ytd-search/div[1]/ytd-two-column-search-results-renderer/div/ytd-section-list-renderer/div[2]/ytd-item-section-renderer/div[3]/ytd-video-renderer[1]/div[1]/ytd-thumbnail/a/yt-image/img").get_attribute('src')
+    if not os.path.exists("music/"+filename):
+        print("baixando a musica agora")
+        inicio = timeit.default_timer()
+        try:
+            yt.streams.get_audio_only().download(output_path="music", filename=filename)
+        except:
+            print("erro ao baixar a musica")
+            filename = "nao.mp3"
+            duracao = "00:01"
+        fim = timeit.default_timer()
+        print(f"baixei a musica {yt.title} em {fim - inicio} segundos")
+    else:
+        print("ja tinha baixado a musica "+yt.title)
     musica = {
         "titulo":titulo,
         "autor":autor,
@@ -189,4 +202,4 @@ def procuraBaixaEColocaNaQueue(pesquisa):
     queue.append(musica)
 
 
-bot.run(s.token,log_handler=None)
+bot.run(s.token)
